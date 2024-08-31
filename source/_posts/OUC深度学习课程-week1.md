@@ -1,6 +1,7 @@
 ---
 title: OUC_DeepLearning_week1
 date: 2024-08-24 22:10:57
+mathjax: true
 tags:
 
 ---
@@ -512,9 +513,13 @@ plot_model(X, Y, model)
 ### 5. 为什么要使用SoftMax？
 
 SoftMax函数的作用是将神经网络的输出转化为概率分布，方便完成分类的任务。SoftMAx函数表达式如下：
+
+{% raw %}
 $$
 \hat{y}_{i}=\frac{e^{z_{i}}}{\sum_{j=1}^{n} e^{z_{j}}}
 $$
+{% endraw %}
+
 SoftMax的输出介于0-1之间，被认为是一个概率分布，在多分类任务中，SoftMax的输出可以认为是该样本被分为某类的概率，概率最高的那个类别会被认为是该样本所在的类别。
 
 ### 6. SGD与Adam哪个更有效？
