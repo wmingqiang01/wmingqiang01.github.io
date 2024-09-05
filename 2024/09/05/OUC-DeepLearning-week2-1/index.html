@@ -1,0 +1,1156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="Hexo Theme Redefine">
+    
+    <meta name="author" content="WangMingqiang">
+    <!-- preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    
+    <!--- Seo Part-->
+    
+    <link rel="canonical" href="http://example.com/2024/09/05/ouc-deeplearning-week2-1/"/>
+    <meta name="robots" content="index,follow">
+    <meta name="googlebot" content="index,follow">
+    <meta name="revisit-after" content="1 days">
+    
+        <meta name="description" content="实验一 构建简单CNN实现Mnist手写数字数据集的分类 12345678910111213141516import torchimport torch.nn as nnimport torch.nn.functional as Fimport torch.optim as optimfrom torchvision import datasets, transformsimport matp">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OUC_DeepLearning_week2">
+<meta property="og:url" content="http://example.com/2024/09/05/OUC-DeepLearning-week2-1/index.html">
+<meta property="og:site_name" content="WangMingqiang">
+<meta property="og:description" content="实验一 构建简单CNN实现Mnist手写数字数据集的分类 12345678910111213141516import torchimport torch.nn as nnimport torch.nn.functional as Fimport torch.optim as optimfrom torchvision import datasets, transformsimport matp">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="d:\Desktop\DEEPlearning_work\week2_files\week2_4_0.png">
+<meta property="og:image" content="d:\Desktop\DEEPlearning_work\week2_files\week2_13_0.png">
+<meta property="og:image" content="d:\Desktop\DEEPlearning_work\week2_files\week2_20_0.png">
+<meta property="og:image" content="d:\Desktop\DEEPlearning_work\week2_files\week2_23_0.png">
+<meta property="article:published_time" content="2024-09-05T09:18:24.000Z">
+<meta property="article:modified_time" content="2024-09-05T09:19:05.768Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="d:\Desktop\DEEPlearning_work\week2_files\week2_4_0.png">
+    
+    
+    <!--- Icon Part-->
+    <link rel="icon" type="image/png" href="/images/redefine-favicon.svg" sizes="192x192">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/redefine-favicon.svg">
+    <meta name="theme-color" content="#A31F34">
+    <link rel="shortcut icon" href="/images/redefine-favicon.svg">
+    <!--- Page Info-->
+    
+    <title>
+        
+            OUC_DeepLearning_week2 -
+        
+        王明强的世界
+    </title>
+
+    
+<link rel="stylesheet" href="/fonts/Chillax/chillax.css">
+
+
+    <!--- Inject Part-->
+    
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    
+        
+<link rel="stylesheet" href="/assets/build/styles.css">
+
+    
+
+    
+<link rel="stylesheet" href="/fonts/GeistMono/geist-mono.css">
+
+    
+<link rel="stylesheet" href="/fonts/Geist/geist.css">
+
+    <!--- Font Part-->
+    
+    
+    
+    
+    
+    
+        
+<script src="/js/libs/anime.min.js"></script>
+
+    
+
+    <script id="hexo-configurations">
+    window.config = {"hostname":"example.com","root":"/","language":"en"};
+    window.theme = {"articles":{"style":{"font_size":"16px","line_height":1.5,"image_border_radius":"14px","image_alignment":"center","image_caption":false,"link_icon":true,"title_alignment":"left","headings_top_spacing":{"h1":"3.2rem","h2":"2.4rem","h3":"1.9rem","h4":"1.6rem","h5":"1.4rem","h6":"1.3rem"}},"word_count":{"enable":true,"count":true,"min2read":true},"author_label":{"enable":true,"auto":false,"list":[]},"code_block":{"copy":true,"style":"mac","highlight_theme":{"light":"github","dark":"vs2015"},"font":{"enable":false,"family":null,"url":null}},"toc":{"enable":true,"max_depth":3,"number":false,"expand":true,"init_open":true},"copyright":{"enable":false,"default":"cc_by_nc_sa"},"lazyload":true,"recommendation":{"enable":false,"title":"推荐阅读","limit":3,"mobile_limit":2,"placeholder":"/images/wallhaven-wqery6-light.webp","skip_dirs":[]}},"colors":{"primary":"#A31F34","secondary":null,"default_mode":"light"},"global":{"fonts":{"chinese":{"enable":false,"family":null,"url":null},"english":{"enable":false,"family":null,"url":null},"title":{"enable":false,"family":null,"url":null}},"content_max_width":"1000px","sidebar_width":"210px","hover":{"shadow":true,"scale":false},"scroll_progress":{"bar":false,"percentage":true},"website_counter":{"url":"https://cn.vercount.one/js","enable":true,"site_pv":true,"site_uv":true,"post_pv":true},"single_page":true,"preloader":true,"open_graph":true,"google_analytics":{"enable":false,"id":null}},"home_banner":{"enable":true,"style":"fixed","image":{"light":"/images/wallhaven-wqery6-light.webp","dark":"/images/wallhaven-wqery6-dark.webp"},"title":"WangMingqiang","subtitle":{"text":[],"hitokoto":{"enable":false,"show_author":false,"api":"https://v1.hitokoto.cn"},"typing_speed":100,"backing_speed":80,"starting_delay":500,"backing_delay":1500,"loop":true,"smart_backspace":true},"text_color":{"light":"#fff","dark":"#d1d1b6"},"text_style":{"title_size":"2.8rem","subtitle_size":"1.5rem","line_height":1.2},"custom_font":{"enable":false,"family":null,"url":null},"social_links":{"enable":false,"style":"default","links":{"github":"https://github.com/wmingqiang01","instagram":null,"zhihu":null,"twitter":null,"email":null},"qrs":{"weixin":null}}},"plugins":{"feed":{"enable":false},"aplayer":{"enable":false,"type":"fixed","audios":[{"name":null,"artist":null,"url":null,"cover":null,"lrc":null}]},"mermaid":{"enable":false,"version":"9.3.0"}},"version":"2.7.0","navbar":{"auto_hide":false,"color":{"left":"#f78736","right":"#367df7","transparency":35},"width":{"home":"1200px","pages":"1000px"},"links":{"Home":{"path":"/","icon":"fa-regular fa-house"}},"search":{"enable":false,"preload":true}},"page_templates":{"friends_column":2,"tags_style":"blur"},"home":{"sidebar":{"enable":true,"position":"left","first_item":"menu","announcement":null,"show_on_mobile":true,"links":null},"article_date_format":"auto","excerpt_length":200,"categories":{"enable":true,"limit":3},"tags":{"enable":true,"limit":3}},"footerStart":"2022/8/17 11:45:14"};
+    window.lang_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"};
+    window.data = {"masonry":false};
+  </script>
+    
+    <!--- Fontawesome Part-->
+    
+<link rel="stylesheet" href="/fontawesome/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/brands.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/solid.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/regular.min.css">
+
+    
+    
+    
+    
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+        <span class="pjax-progress-bar"></span>
+<!--        <span class="swup-progress-icon">-->
+<!--            <i class="fa-solid fa-circle-notch fa-spin"></i>-->
+<!--        </span>-->
+    
+</div>
+
+
+
+    <style>
+    :root {
+        --preloader-background-color: #fff;
+        --preloader-text-color: #000;
+    }
+
+    @media (prefers-color-scheme: dark) {
+        :root {
+            --preloader-background-color: #202124;
+            --preloader-text-color: #fff;
+        }
+    }
+
+    @media (prefers-color-scheme: light) {
+        :root {
+            --preloader-background-color: #fff;
+            --preloader-text-color: #000;
+        }
+    }
+
+    @media (max-width: 600px) {
+        .ml13 {
+            font-size: 2.6rem !important; /* Adjust this value as needed */
+        }
+    }
+
+    .preloader {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem; /* Tailwind 'gap-4' is 1rem */
+        align-items: center;
+        justify-content: center;
+        position: fixed;
+        padding: 12px;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh; /* 'h-screen' is 100% of the viewport height */
+        background-color: var(--preloader-background-color);
+        z-index: 1100; /* 'z-[1100]' sets the z-index */
+        transition: opacity 0.2s ease-in-out;
+    }
+
+    .ml13 {
+        font-size: 3.2rem;
+        /* text-transform: uppercase; */
+        color: var(--preloader-text-color);
+        letter-spacing: -1px;
+        font-weight: 500;
+        font-family: 'Chillax-Variable', sans-serif;
+        text-align: center;
+    }
+
+    .ml13 .word {
+        display: inline-flex;
+        flex-wrap: wrap;
+        white-space: nowrap;
+    }
+
+    .ml13 .letter {
+        display: inline-block;
+        line-height: 1em;
+    }
+</style>
+
+<div class="preloader">
+    <h2 class="ml13">
+        王明强的世界
+    </h2>
+    <script>
+        var textWrapper = document.querySelector('.ml13');
+        // Split text into words
+        var words = textWrapper.textContent.trim().split(' ');
+
+        // Clear the existing content
+        textWrapper.innerHTML = '';
+
+        // Wrap each word and its letters in spans
+        words.forEach(function(word) {
+            var wordSpan = document.createElement('span');
+            wordSpan.classList.add('word');
+            wordSpan.innerHTML = word.replace(/\S/g, "<span class='letter'>$&</span>");
+            textWrapper.appendChild(wordSpan);
+            textWrapper.appendChild(document.createTextNode(' ')); // Add space between words
+        });
+
+        var animation = anime.timeline({loop: true})
+            .add({
+                targets: '.ml13 .letter',
+                translateY: [40,0],
+                translateZ: 0,
+                opacity: [0,1],
+                filter: ['blur(5px)', 'blur(0px)'], // Starting from blurred to unblurred
+                easing: "easeOutExpo",
+                duration: 1400,
+                delay: (el, i) => 300 + 30 * i,
+            }).add({
+                targets: '.ml13 .letter',
+                translateY: [0,-40],
+                opacity: [1,0],
+                filter: ['blur(0px)', 'blur(5px)'], // Ending from unblurred to blurred
+                easing: "easeInExpo",
+                duration: 1200,
+                delay: (el, i) => 100 + 30 * i,
+                complete: function() {
+                    hidePreloader(); // Call hidePreloader after the animation completes
+                }
+            });
+
+        let themeStatus = JSON.parse(localStorage.getItem('REDEFINE-THEME-STATUS'))?.isDark;
+
+        // If the theme status is not found in local storage, check the preferred color scheme
+        if (themeStatus === undefined || themeStatus === null) {
+            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                themeStatus = 'dark';
+            } else {
+                themeStatus = 'light';
+            }
+        }
+
+        // Now you can use the themeStatus variable in your code
+        if (themeStatus) {
+            document.documentElement.style.setProperty('--preloader-background-color', '#202124');
+            document.documentElement.style.setProperty('--preloader-text-color', '#fff');
+        } else {
+            document.documentElement.style.setProperty('--preloader-background-color', '#fff');
+            document.documentElement.style.setProperty('--preloader-text-color', '#000');
+        }
+
+        window.addEventListener('load', function () {
+            setTimeout(hidePreloader, 5000); // Call hidePreloader after 5000 milliseconds if not already called by animation
+        });
+
+        function hidePreloader() {
+            var preloader = document.querySelector('.preloader');
+            preloader.style.opacity = '0';
+            setTimeout(function () {
+                preloader.style.display = 'none';
+            }, 200);
+        }
+    </script>
+</div>
+
+<main class="page-container" id="swup">
+
+    
+
+    <div class="main-content-container">
+
+
+        <div class="main-content-header">
+            <header class="navbar-container px-6 md:px-12">
+
+    <div class="navbar-content ">
+        <div class="left">
+            
+            <a class="logo-title" href="/">
+                
+                王明强的世界
+                
+            </a>
+        </div>
+
+        <div class="right">
+            <!-- PC -->
+            <div class="desktop">
+                <ul class="navbar-list">
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/"
+                                        >
+                                    <i class="fa-regular fa-house fa-fw"></i>
+                                    HOME
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                    
+                </ul>
+            </div>
+            <!-- Mobile -->
+            <div class="mobile">
+                
+                <div class="icon-item navbar-bar">
+                    <div class="navbar-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile sheet -->
+    <div class="navbar-drawer h-screen w-full absolute top-0 left-0 bg-background-color flex flex-col justify-between">
+        <ul class="drawer-navbar-list flex flex-col px-4 justify-center items-start">
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/"
+                        >
+                            <span>
+                                HOME
+                            </span>
+                            
+                                <i class="fa-regular fa-house fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+
+            
+            
+        </ul>
+
+        <div class="statistics flex justify-around my-2.5">
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/tags">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">0</div>
+        <div class="label text-third-text-color text-sm">Tags</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/categories">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">0</div>
+        <div class="label text-third-text-color text-sm">Categories</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/archives">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">3</div>
+        <div class="label text-third-text-color text-sm">Posts</div>
+    </a>
+</div>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="main-content-body">
+
+            
+
+            <div class="main-content">
+
+                
+                    <div class="post-page-container flex relative justify-between box-border w-full h-full">
+    <div class="article-content-container">
+
+        <div class="article-title relative w-full">
+            
+                <div class="w-full flex items-center pt-6 justify-start">
+                    <h1 class="article-title-regular text-second-text-color tracking-tight text-4xl md:text-6xl font-semibold px-2 sm:px-6 md:px-8 py-3">OUC_DeepLearning_week2</h1>
+                </div>
+            
+            </div>
+
+        
+            <div class="article-header flex flex-row gap-2 items-center px-2 sm:px-6 md:px-8">
+                <div class="avatar w-[46px] h-[46px] flex-shrink-0 rounded-medium border border-border-color p-[1px]">
+                    <img src="/images/redefine-avatar.svg">
+                </div>
+                <div class="info flex flex-col justify-between">
+                    <div class="author flex items-center">
+                        <span class="name text-default-text-color text-lg font-semibold">WangMingqiang</span>
+                        
+                            <span class="author-label ml-1.5 text-xs px-2 py-0.5 rounded-small text-third-text-color border border-shadow-color-1">Lv1</span>
+                        
+                    </div>
+                    <div class="meta-info">
+                        <div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fa-regular fa-pen-fancy"></i>&nbsp;
+        <span class="desktop">2024-09-05 17:18:24</span>
+        <span class="mobile">2024-09-05 17:18:24</span>
+        <span class="hover-info">Created</span>
+    </span>
+    
+        <span class="article-date article-meta-item">
+            <i class="fa-regular fa-wrench"></i>&nbsp;
+            <span class="desktop">2024-09-05 17:19:05</span>
+            <span class="mobile">2024-09-05 17:19:05</span>
+            <span class="hover-info">Updated</span>
+        </span>
+    
+
+    
+    
+
+    
+    
+    
+    
+        <span class="article-pv article-meta-item">
+            <i class="fa-regular fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+        </span>
+    
+</div>
+
+                    </div>
+                </div>
+            </div>
+        
+
+        
+
+
+        <div class="article-content markdown-body px-2 sm:px-6 md:px-8 pb-8">
+            <h1 id="实验一">实验一</h1>
+<p>构建简单CNN实现Mnist手写数字数据集的分类</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> torch.nn <span class="keyword">as</span> nn</span><br><span class="line"><span class="keyword">import</span> torch.nn.functional <span class="keyword">as</span> F</span><br><span class="line"><span class="keyword">import</span> torch.optim <span class="keyword">as</span> optim</span><br><span class="line"><span class="keyword">from</span> torchvision <span class="keyword">import</span> datasets, transforms</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> numpy</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">get_params</span>(<span class="params">model</span>):</span><br><span class="line">  np = <span class="number">0</span></span><br><span class="line">  <span class="keyword">for</span> p <span class="keyword">in</span> <span class="built_in">list</span>(model.parameters()):</span><br><span class="line">    np += p.nelement()</span><br><span class="line">  <span class="keyword">return</span> np</span><br><span class="line"></span><br><span class="line">device = torch.device(<span class="string">&quot;cuda&quot;</span> <span class="keyword">if</span> torch.cuda.is_available() <span class="keyword">else</span> <span class="string">&quot;cpu&quot;</span>)</span><br><span class="line">device</span><br></pre></td></tr></table></figure></div>
+<pre><code>device(type=&#39;cuda&#39;)</code></pre>
+<h2 id="加载数据">加载数据</h2>
+<p>PyTorch里包含了 MNIST， CIFAR10 等常用数据集，调用
+torchvision.datasets
+即可把这些数据由远程下载到本地，下面给出MNIST的使用方法：</p>
+<p>torchvision.datasets.MNIST(root, train=True, transform=None,
+target_transform=None, download=False)</p>
+<p>root 为数据集下载到本地后的根目录，包括 training.pt 和 test.pt
+文件</p>
+<p>train，如果设置为True，从training.pt创建数据集，否则从test.pt创建。</p>
+<p>download，如果设置为True, 从互联网下载数据并放到root文件夹下</p>
+<p>transform, 一种函数或变换，输入PIL图片，返回变换之后的数据。</p>
+<p>target_transform 一种函数或变换，输入目标，进行变换。</p>
+<p>另外值得注意的是，DataLoader是一个比较重要的类，提供的常用操作有：batch_size(每个batch的大小),
+shuffle(是否进行随机打乱顺序的操作),
+num_workers(加载数据的时候使用几个子进程)</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">input_size = <span class="number">28</span>*<span class="number">28</span></span><br><span class="line">output_size = <span class="number">10</span></span><br><span class="line"></span><br><span class="line">train_loader = torch.utils.data.DataLoader(</span><br><span class="line">    datasets.MNIST(<span class="string">&#x27;../data&#x27;</span>, train=<span class="literal">True</span>, download=<span class="literal">True</span>,</span><br><span class="line">                   transform=transforms.Compose([</span><br><span class="line">                       transforms.ToTensor(),</span><br><span class="line">                       transforms.Normalize((<span class="number">0.1307</span>,), (<span class="number">0.3081</span>,))</span><br><span class="line">                   ])),</span><br><span class="line">    batch_size=<span class="number">64</span>, shuffle=<span class="literal">True</span></span><br><span class="line">)</span><br><span class="line">test_loader = torch.utils.data.DataLoader(</span><br><span class="line">    datasets.MNIST(<span class="string">&#x27;../data&#x27;</span>, train=<span class="literal">False</span>, transform=transforms.Compose([</span><br><span class="line">                       transforms.ToTensor(),</span><br><span class="line">                       transforms.Normalize((<span class="number">0.1307</span>,), (<span class="number">0.3081</span>,))</span><br><span class="line">                   ])),</span><br><span class="line">    batch_size=<span class="number">1000</span>, shuffle=<span class="literal">True</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure></div>
+<pre><code>Downloading http://yann.lecun.com/exdb/mnist/train-images-idx3-ubyte.gz
+Failed to download (trying next):
+HTTP Error 403: Forbidden
+
+Downloading https://ossci-datasets.s3.amazonaws.com/mnist/train-images-idx3-ubyte.gz
+Downloading https://ossci-datasets.s3.amazonaws.com/mnist/train-images-idx3-ubyte.gz to ../data/MNIST/raw/train-images-idx3-ubyte.gz
+
+
+100%|██████████| 9912422/9912422 [00:05&lt;00:00, 1905305.23it/s]
+
+
+Extracting ../data/MNIST/raw/train-images-idx3-ubyte.gz to ../data/MNIST/raw
+
+Downloading http://yann.lecun.com/exdb/mnist/train-labels-idx1-ubyte.gz
+Failed to download (trying next):
+HTTP Error 403: Forbidden
+
+Downloading https://ossci-datasets.s3.amazonaws.com/mnist/train-labels-idx1-ubyte.gz
+Downloading https://ossci-datasets.s3.amazonaws.com/mnist/train-labels-idx1-ubyte.gz to ../data/MNIST/raw/train-labels-idx1-ubyte.gz
+
+
+100%|██████████| 28881/28881 [00:00&lt;00:00, 804460.71it/s]
+
+
+Extracting ../data/MNIST/raw/train-labels-idx1-ubyte.gz to ../data/MNIST/raw
+
+Downloading http://yann.lecun.com/exdb/mnist/t10k-images-idx3-ubyte.gz
+Failed to download (trying next):
+HTTP Error 403: Forbidden
+
+Downloading https://ossci-datasets.s3.amazonaws.com/mnist/t10k-images-idx3-ubyte.gz
+Downloading https://ossci-datasets.s3.amazonaws.com/mnist/t10k-images-idx3-ubyte.gz to ../data/MNIST/raw/t10k-images-idx3-ubyte.gz
+
+
+100%|██████████| 1648877/1648877 [00:01&lt;00:00, 1466150.68it/s]
+
+
+Extracting ../data/MNIST/raw/t10k-images-idx3-ubyte.gz to ../data/MNIST/raw
+
+Downloading http://yann.lecun.com/exdb/mnist/t10k-labels-idx1-ubyte.gz
+Failed to download (trying next):
+HTTP Error 403: Forbidden
+
+Downloading https://ossci-datasets.s3.amazonaws.com/mnist/t10k-labels-idx1-ubyte.gz
+Downloading https://ossci-datasets.s3.amazonaws.com/mnist/t10k-labels-idx1-ubyte.gz to ../data/MNIST/raw/t10k-labels-idx1-ubyte.gz
+
+
+100%|██████████| 4542/4542 [00:00&lt;00:00, 11928947.26it/s]
+
+Extracting ../data/MNIST/raw/t10k-labels-idx1-ubyte.gz to ../data/MNIST/raw</code></pre>
+<p>​</p>
+<p>​</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">plt.figure(figsize = (<span class="number">8</span>,<span class="number">5</span>))</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">20</span>):</span><br><span class="line">  plt.subplot(<span class="number">4</span>,<span class="number">5</span>,i+<span class="number">1</span>)</span><br><span class="line">  img, _ = train_loader.dataset.__getitem__(i)</span><br><span class="line">  plt.imshow(img.squeeze().numpy(),cmap = <span class="string">&#x27;gray&#x27;</span>)</span><br><span class="line">  plt.axis(<span class="string">&#x27;off&#x27;</span>)</span><br></pre></td></tr></table></figure></div>
+<p>​<br />
+<img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="D:\Desktop\DEEPlearning_work\week2_files\week2_4_0.png"
+                     
+alt="png" 
+                > ​</p>
+<h1 id="创建网络">2.创建网络</h1>
+<p>定义网络时，需要继承nn.Module，并实现它的forward方法，把网络中具有可学习参数的层放在构造函数__init__中。</p>
+<p>只要在nn.Module的子类中定义了forward函数，backward函数就会自动被实现(利用autograd)。</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">FC2Layer</span>(nn.Module):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, input_size, n_hidden, output_size</span>):</span><br><span class="line">        <span class="comment"># nn.Module子类的函数必须在构造函数中执行父类的构造函数</span></span><br><span class="line">        <span class="comment"># 下式等价于nn.Module.__init__(self)</span></span><br><span class="line">        <span class="built_in">super</span>(FC2Layer, <span class="variable language_">self</span>).__init__()</span><br><span class="line">        <span class="variable language_">self</span>.input_size = input_size</span><br><span class="line">        <span class="comment"># 这里直接用 Sequential 就定义了网络，注意要和下面 CNN 的代码区分开</span></span><br><span class="line">        <span class="variable language_">self</span>.network = nn.Sequential(</span><br><span class="line">            nn.Linear(input_size, n_hidden),</span><br><span class="line">            nn.ReLU(),</span><br><span class="line">            nn.Linear(n_hidden, n_hidden),</span><br><span class="line">            nn.ReLU(),</span><br><span class="line">            nn.Linear(n_hidden, output_size),</span><br><span class="line">            nn.LogSoftmax(dim=<span class="number">1</span>)</span><br><span class="line">        )</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x</span>):</span><br><span class="line">        <span class="comment"># view一般出现在model类的forward函数中，用于改变输入或输出的形状</span></span><br><span class="line">        <span class="comment"># x.view(-1, self.input_size) 的意思是多维的数据展成二维</span></span><br><span class="line">        <span class="comment"># 代码指定二维数据的列数为 input_size=784，行数 -1 表示我们不想算，电脑会自己计算对应的数字</span></span><br><span class="line">        <span class="comment"># 在 DataLoader 部分，我们可以看到 batch_size 是64，所以得到 x 的行数是64</span></span><br><span class="line">        <span class="comment"># 大家可以加一行代码：print(x.cpu().numpy().shape)</span></span><br><span class="line">        <span class="comment"># 训练过程中，就会看到 (64, 784) 的输出，和我们的预期是一致的</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># forward 函数的作用是，指定网络的运行过程，这个全连接网络可能看不啥意义，</span></span><br><span class="line">        <span class="comment"># 下面的CNN网络可以看出 forward 的作用。</span></span><br><span class="line">        x = x.view(-<span class="number">1</span>, <span class="variable language_">self</span>.input_size)</span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">self</span>.network(x)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">CNN</span>(nn.Module):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, input_size, n_feature, output_size</span>):</span><br><span class="line">        <span class="comment"># 执行父类的构造函数，所有的网络都要这么写</span></span><br><span class="line">        <span class="built_in">super</span>(CNN, <span class="variable language_">self</span>).__init__()</span><br><span class="line">        <span class="comment"># 下面是网络里典型结构的一些定义，一般就是卷积和全连接</span></span><br><span class="line">        <span class="comment"># 池化、ReLU一类的不用在这里定义</span></span><br><span class="line">        <span class="variable language_">self</span>.n_feature = n_feature</span><br><span class="line">        <span class="variable language_">self</span>.conv1 = nn.Conv2d(in_channels=<span class="number">1</span>, out_channels=n_feature, kernel_size=<span class="number">5</span>)</span><br><span class="line">        <span class="variable language_">self</span>.conv2 = nn.Conv2d(n_feature, n_feature, kernel_size=<span class="number">5</span>)</span><br><span class="line">        <span class="variable language_">self</span>.fc1 = nn.Linear(n_feature*<span class="number">4</span>*<span class="number">4</span>, <span class="number">50</span>)</span><br><span class="line">        <span class="variable language_">self</span>.fc2 = nn.Linear(<span class="number">50</span>, <span class="number">10</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 下面的 forward 函数，定义了网络的结构，按照一定顺序，把上面构建的一些结构组织起来</span></span><br><span class="line">    <span class="comment"># 意思就是，conv1, conv2 等等的，可以多次重用</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x, verbose=<span class="literal">False</span></span>):</span><br><span class="line">        x = <span class="variable language_">self</span>.conv1(x)</span><br><span class="line">        x = F.relu(x)</span><br><span class="line">        x = F.max_pool2d(x, kernel_size=<span class="number">2</span>)</span><br><span class="line">        x = <span class="variable language_">self</span>.conv2(x)</span><br><span class="line">        x = F.relu(x)</span><br><span class="line">        x = F.max_pool2d(x, kernel_size=<span class="number">2</span>)</span><br><span class="line">        x = x.view(-<span class="number">1</span>, <span class="variable language_">self</span>.n_feature*<span class="number">4</span>*<span class="number">4</span>)</span><br><span class="line">        x = <span class="variable language_">self</span>.fc1(x)</span><br><span class="line">        x = F.relu(x)</span><br><span class="line">        x = <span class="variable language_">self</span>.fc2(x)</span><br><span class="line">        x = F.log_softmax(x, dim=<span class="number">1</span>)</span><br><span class="line">        <span class="keyword">return</span> x</span><br></pre></td></tr></table></figure></div>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 训练函数</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">train</span>(<span class="params">model</span>):</span><br><span class="line">    model.train()</span><br><span class="line">    <span class="comment"># 主里从train_loader里，64个样本一个batch为单位提取样本进行训练</span></span><br><span class="line">    <span class="keyword">for</span> batch_idx, (data, target) <span class="keyword">in</span> <span class="built_in">enumerate</span>(train_loader):</span><br><span class="line">        <span class="comment"># 把数据送到GPU中</span></span><br><span class="line">        data, target = data.to(device), target.to(device)</span><br><span class="line"></span><br><span class="line">        optimizer.zero_grad()</span><br><span class="line">        output = model(data)</span><br><span class="line">        loss = F.nll_loss(output, target)</span><br><span class="line">        loss.backward()</span><br><span class="line">        optimizer.step()</span><br><span class="line">        <span class="keyword">if</span> batch_idx % <span class="number">100</span> == <span class="number">0</span>:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&#x27;Train: [&#123;&#125;/&#123;&#125; (&#123;:.0f&#125;%)]\tLoss: &#123;:.6f&#125;&#x27;</span>.<span class="built_in">format</span>(</span><br><span class="line">                batch_idx * <span class="built_in">len</span>(data), <span class="built_in">len</span>(train_loader.dataset),</span><br><span class="line">                <span class="number">100.</span> * batch_idx / <span class="built_in">len</span>(train_loader), loss.item()))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">test</span>(<span class="params">model</span>):</span><br><span class="line">    model.<span class="built_in">eval</span>()</span><br><span class="line">    test_loss = <span class="number">0</span></span><br><span class="line">    correct = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> data, target <span class="keyword">in</span> test_loader:</span><br><span class="line">        <span class="comment"># 把数据送到GPU中</span></span><br><span class="line">        data, target = data.to(device), target.to(device)</span><br><span class="line">        <span class="comment"># 把数据送入模型，得到预测结果</span></span><br><span class="line">        output = model(data)</span><br><span class="line">        <span class="comment"># 计算本次batch的损失，并加到 test_loss 中</span></span><br><span class="line">        test_loss += F.nll_loss(output, target, reduction=<span class="string">&#x27;sum&#x27;</span>).item()</span><br><span class="line">        <span class="comment"># get the index of the max log-probability，最后一层输出10个数，</span></span><br><span class="line">        <span class="comment"># 值最大的那个即对应着分类结果，然后把分类结果保存在 pred 里</span></span><br><span class="line">        pred = output.data.<span class="built_in">max</span>(<span class="number">1</span>, keepdim=<span class="literal">True</span>)[<span class="number">1</span>]</span><br><span class="line">        <span class="comment"># 将 pred 与 target 相比，得到正确预测结果的数量，并加到 correct 中</span></span><br><span class="line">        <span class="comment"># 这里需要注意一下 view_as ，意思是把 target 变成维度和 pred 一样的意思</span></span><br><span class="line">        correct += pred.eq(target.data.view_as(pred)).cpu().<span class="built_in">sum</span>().item()</span><br><span class="line"></span><br><span class="line">    test_loss /= <span class="built_in">len</span>(test_loader.dataset)</span><br><span class="line">    accuracy = <span class="number">100.</span> * correct / <span class="built_in">len</span>(test_loader.dataset)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;\nTest set: Average loss: &#123;:.4f&#125;, Accuracy: &#123;&#125;/&#123;&#125; (&#123;:.0f&#125;%)\n&#x27;</span>.<span class="built_in">format</span>(</span><br><span class="line">        test_loss, correct, <span class="built_in">len</span>(test_loader.dataset),</span><br><span class="line">        accuracy))</span><br></pre></td></tr></table></figure></div>
+<h1 id="在小型全连接网络上训练">3.在小型全连接网络上训练</h1>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">n_hidden = <span class="number">8</span> <span class="comment"># number of hidden units</span></span><br><span class="line"></span><br><span class="line">model_fnn = FC2Layer(input_size, n_hidden, output_size)</span><br><span class="line">model_fnn.to(device)</span><br><span class="line">optimizer = optim.SGD(model_fnn.parameters(), lr=<span class="number">0.01</span>, momentum=<span class="number">0.5</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;Number of parameters: &#123;&#125;&#x27;</span>.<span class="built_in">format</span>(get_params(model_fnn)))</span><br><span class="line"></span><br><span class="line">train(model_fnn)</span><br><span class="line">test(model_fnn)</span><br></pre></td></tr></table></figure></div>
+<pre><code>Number of parameters: 6442
+Train: [0/60000 (0%)]   Loss: 2.267809
+Train: [6400/60000 (11%)]   Loss: 1.667629
+Train: [12800/60000 (21%)]  Loss: 1.133887
+Train: [19200/60000 (32%)]  Loss: 0.789954
+Train: [25600/60000 (43%)]  Loss: 0.667085
+Train: [32000/60000 (53%)]  Loss: 0.578891
+Train: [38400/60000 (64%)]  Loss: 0.404739
+Train: [44800/60000 (75%)]  Loss: 0.406378
+Train: [51200/60000 (85%)]  Loss: 0.340552
+Train: [57600/60000 (96%)]  Loss: 0.495622
+
+Test set: Average loss: 0.3989, Accuracy: 8834/10000 (88%)</code></pre>
+<p>​</p>
+<h1 id="在cnn上训练">4.在CNN上训练</h1>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Training settings</span></span><br><span class="line">n_features = <span class="number">6</span> <span class="comment"># number of feature maps</span></span><br><span class="line"></span><br><span class="line">model_cnn = CNN(input_size, n_features, output_size)</span><br><span class="line">model_cnn.to(device)</span><br><span class="line">optimizer = optim.SGD(model_cnn.parameters(), lr=<span class="number">0.01</span>, momentum=<span class="number">0.5</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;Number of parameters: &#123;&#125;&#x27;</span>.<span class="built_in">format</span>(get_params(model_cnn)))</span><br><span class="line"></span><br><span class="line">train(model_cnn)</span><br><span class="line">test(model_cnn)</span><br></pre></td></tr></table></figure></div>
+<pre><code>Number of parameters: 6422
+Train: [0/60000 (0%)]   Loss: 2.313729
+Train: [6400/60000 (11%)]   Loss: 1.540867
+Train: [12800/60000 (21%)]  Loss: 0.659880
+Train: [19200/60000 (32%)]  Loss: 0.253553
+Train: [25600/60000 (43%)]  Loss: 0.368782
+Train: [32000/60000 (53%)]  Loss: 0.468929
+Train: [38400/60000 (64%)]  Loss: 0.207900
+Train: [44800/60000 (75%)]  Loss: 0.218204
+Train: [51200/60000 (85%)]  Loss: 0.276357
+Train: [57600/60000 (96%)]  Loss: 0.123874
+
+Test set: Average loss: 0.1568, Accuracy: 9533/10000 (95%)</code></pre>
+<p>​</p>
+<h1
+id="打乱像素顺序重新在两个网络上训练">5.打乱像素顺序，重新在两个网络上训练</h1>
+<p>考虑到CNN在卷积与池化上的优良特性，如果我们把图像中的像素打乱顺序，这样
+卷积 和 池化
+就难以发挥作用了，为了验证这个想法，我们把图像中的像素打乱顺序再试试。</p>
+<p>首先下面代码展示随机打乱像素顺序后，图像的形态：</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">perm = torch.randperm(<span class="number">784</span>)</span><br><span class="line">plt.figure(figsize = (<span class="number">8</span>,<span class="number">5</span>))</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">10</span>):</span><br><span class="line">  img, _ = train_loader.dataset.__getitem__(i)</span><br><span class="line"></span><br><span class="line">  img_perm = img.view(-<span class="number">1</span>, <span class="number">28</span>*<span class="number">28</span>).clone()</span><br><span class="line">  img_perm = img_perm[:, perm]</span><br><span class="line">  img_perm = img_perm.view(-<span class="number">1</span>, <span class="number">28</span>, <span class="number">28</span>)</span><br><span class="line">  plt.subplot(<span class="number">4</span>,<span class="number">5</span>,i+<span class="number">1</span>)</span><br><span class="line">  plt.imshow(img_perm.squeeze().numpy(),cmap = <span class="string">&#x27;gray&#x27;</span>)</span><br><span class="line">  plt.axis(<span class="string">&#x27;off&#x27;</span>)</span><br><span class="line">  plt.subplot(<span class="number">4</span>,<span class="number">5</span>,i+<span class="number">11</span>)</span><br><span class="line">  plt.imshow(img.squeeze().numpy(),cmap = <span class="string">&#x27;gray&#x27;</span>)</span><br><span class="line">  plt.axis(<span class="string">&#x27;off&#x27;</span>)</span><br></pre></td></tr></table></figure></div>
+<p>​<br />
+<img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="D:\Desktop\DEEPlearning_work\week2_files\week2_13_0.png"
+                     
+alt="png" 
+                > ​</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 对每个 batch 里的数据，打乱像素顺序的函数</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">perm_pixel</span>(<span class="params">data, perm</span>):</span><br><span class="line">    <span class="comment"># 转化为二维矩阵</span></span><br><span class="line">    data_new = data.view(-<span class="number">1</span>, <span class="number">28</span>*<span class="number">28</span>)</span><br><span class="line">    <span class="comment"># 打乱像素顺序</span></span><br><span class="line">    data_new = data_new[:, perm]</span><br><span class="line">    <span class="comment"># 恢复为原来4维的 tensor</span></span><br><span class="line">    data_new = data_new.view(-<span class="number">1</span>, <span class="number">1</span>, <span class="number">28</span>, <span class="number">28</span>)</span><br><span class="line">    <span class="keyword">return</span> data_new</span><br><span class="line"></span><br><span class="line"><span class="comment"># 训练函数</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">train_perm</span>(<span class="params">model, perm</span>):</span><br><span class="line">    model.train()</span><br><span class="line">    <span class="keyword">for</span> batch_idx, (data, target) <span class="keyword">in</span> <span class="built_in">enumerate</span>(train_loader):</span><br><span class="line">        data, target = data.to(device), target.to(device)</span><br><span class="line">        <span class="comment"># 像素打乱顺序</span></span><br><span class="line">        data = perm_pixel(data, perm)</span><br><span class="line"></span><br><span class="line">        optimizer.zero_grad()</span><br><span class="line">        output = model(data)</span><br><span class="line">        loss = F.nll_loss(output, target)</span><br><span class="line">        loss.backward()</span><br><span class="line">        optimizer.step()</span><br><span class="line">        <span class="keyword">if</span> batch_idx % <span class="number">100</span> == <span class="number">0</span>:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&#x27;Train: [&#123;&#125;/&#123;&#125; (&#123;:.0f&#125;%)]\tLoss: &#123;:.6f&#125;&#x27;</span>.<span class="built_in">format</span>(</span><br><span class="line">                batch_idx * <span class="built_in">len</span>(data), <span class="built_in">len</span>(train_loader.dataset),</span><br><span class="line">                <span class="number">100.</span> * batch_idx / <span class="built_in">len</span>(train_loader), loss.item()))</span><br><span class="line"></span><br><span class="line"><span class="comment"># 测试函数</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">test_perm</span>(<span class="params">model, perm</span>):</span><br><span class="line">    model.<span class="built_in">eval</span>()</span><br><span class="line">    test_loss = <span class="number">0</span></span><br><span class="line">    correct = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> data, target <span class="keyword">in</span> test_loader:</span><br><span class="line">        data, target = data.to(device), target.to(device)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 像素打乱顺序</span></span><br><span class="line">        data = perm_pixel(data, perm)</span><br><span class="line"></span><br><span class="line">        output = model(data)</span><br><span class="line">        test_loss += F.nll_loss(output, target, reduction=<span class="string">&#x27;sum&#x27;</span>).item()</span><br><span class="line">        pred = output.data.<span class="built_in">max</span>(<span class="number">1</span>, keepdim=<span class="literal">True</span>)[<span class="number">1</span>]</span><br><span class="line">        correct += pred.eq(target.data.view_as(pred)).cpu().<span class="built_in">sum</span>().item()</span><br><span class="line"></span><br><span class="line">    test_loss /= <span class="built_in">len</span>(test_loader.dataset)</span><br><span class="line">    accuracy = <span class="number">100.</span> * correct / <span class="built_in">len</span>(test_loader.dataset)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;\nTest set: Average loss: &#123;:.4f&#125;, Accuracy: &#123;&#125;/&#123;&#125; (&#123;:.0f&#125;%)\n&#x27;</span>.<span class="built_in">format</span>(</span><br><span class="line">        test_loss, correct, <span class="built_in">len</span>(test_loader.dataset),</span><br><span class="line">        accuracy))</span><br></pre></td></tr></table></figure></div>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">perm = torch.randperm(<span class="number">784</span>)</span><br><span class="line">n_hidden = <span class="number">8</span> <span class="comment"># number of hidden units</span></span><br><span class="line"></span><br><span class="line">model_fnn = FC2Layer(input_size, n_hidden, output_size)</span><br><span class="line">model_fnn.to(device)</span><br><span class="line">optimizer = optim.SGD(model_fnn.parameters(), lr=<span class="number">0.01</span>, momentum=<span class="number">0.5</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;Number of parameters: &#123;&#125;&#x27;</span>.<span class="built_in">format</span>(get_params(model_fnn)))</span><br><span class="line"></span><br><span class="line">train_perm(model_fnn, perm)</span><br><span class="line">test_perm(model_fnn, perm)</span><br></pre></td></tr></table></figure></div>
+<pre><code>Number of parameters: 6442
+Train: [0/60000 (0%)]   Loss: 2.276114
+Train: [6400/60000 (11%)]   Loss: 1.977035
+Train: [12800/60000 (21%)]  Loss: 1.208702
+Train: [19200/60000 (32%)]  Loss: 0.766204
+Train: [25600/60000 (43%)]  Loss: 0.572204
+Train: [32000/60000 (53%)]  Loss: 0.502192
+Train: [38400/60000 (64%)]  Loss: 0.519949
+Train: [44800/60000 (75%)]  Loss: 0.381867
+Train: [51200/60000 (85%)]  Loss: 0.450572
+Train: [57600/60000 (96%)]  Loss: 0.397750
+
+Test set: Average loss: 0.3996, Accuracy: 8857/10000 (89%)</code></pre>
+<p>​</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">perm = torch.randperm(<span class="number">784</span>)</span><br><span class="line">n_features = <span class="number">6</span> <span class="comment"># number of feature maps</span></span><br><span class="line"></span><br><span class="line">model_cnn = CNN(input_size, n_features, output_size)</span><br><span class="line">model_cnn.to(device)</span><br><span class="line">optimizer = optim.SGD(model_cnn.parameters(), lr=<span class="number">0.01</span>, momentum=<span class="number">0.5</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;Number of parameters: &#123;&#125;&#x27;</span>.<span class="built_in">format</span>(get_params(model_cnn)))</span><br><span class="line"></span><br><span class="line">train_perm(model_cnn, perm)</span><br><span class="line">test_perm(model_cnn, perm)</span><br></pre></td></tr></table></figure></div>
+<pre><code>Number of parameters: 6422
+Train: [0/60000 (0%)]   Loss: 2.353731
+Train: [6400/60000 (11%)]   Loss: 2.274198
+Train: [12800/60000 (21%)]  Loss: 2.217433
+Train: [19200/60000 (32%)]  Loss: 1.983218
+Train: [25600/60000 (43%)]  Loss: 1.231610
+Train: [32000/60000 (53%)]  Loss: 0.853280
+Train: [38400/60000 (64%)]  Loss: 0.832802
+Train: [44800/60000 (75%)]  Loss: 0.872526
+Train: [51200/60000 (85%)]  Loss: 0.609364
+Train: [57600/60000 (96%)]  Loss: 0.527641
+
+Test set: Average loss: 0.5491, Accuracy: 8283/10000 (83%)</code></pre>
+<p>​</p>
+<p>从打乱像素顺序的实验结果来看，全连接网络的性能基本上没有发生变化，但是
+卷积神经网络的性能明显下降。</p>
+<p>这是因为对于卷积神经网络，会利用像素的局部关系，但是打乱顺序以后，这些像素间的关系将无法得到利用。</p>
+<h1 id="实验二-搭建cnn完成cifar10分类">实验二
+搭建CNN完成CIFAR10分类</h1>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> torchvision</span><br><span class="line"><span class="keyword">import</span> torchvision.transforms <span class="keyword">as</span> transforms</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> torch.nn <span class="keyword">as</span> nn</span><br><span class="line"><span class="keyword">import</span> torch.nn.functional <span class="keyword">as</span> F</span><br><span class="line"><span class="keyword">import</span> torch.optim <span class="keyword">as</span> optim</span><br><span class="line"></span><br><span class="line">device = torch.device(<span class="string">&quot;cuda:0&quot;</span> <span class="keyword">if</span> torch.cuda.is_available() <span class="keyword">else</span> <span class="string">&quot;cpu&quot;</span>)</span><br><span class="line"></span><br><span class="line">transform = transforms.Compose(</span><br><span class="line">    [transforms.ToTensor(),</span><br><span class="line">     transforms.Normalize((<span class="number">0.5</span>, <span class="number">0.5</span>, <span class="number">0.5</span>), (<span class="number">0.5</span>, <span class="number">0.5</span>, <span class="number">0.5</span>))])</span><br><span class="line"></span><br><span class="line">trainset = torchvision.datasets.CIFAR10(root=<span class="string">&#x27;./data&#x27;</span>, train=<span class="literal">True</span>,</span><br><span class="line">                                        download=<span class="literal">True</span>, transform=transform)</span><br><span class="line">trainloader = torch.utils.data.DataLoader(trainset, batch_size=<span class="number">64</span>,</span><br><span class="line">                                          shuffle=<span class="literal">True</span>, num_workers=<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">testset = torchvision.datasets.CIFAR10(root=<span class="string">&#x27;./data&#x27;</span>, train=<span class="literal">False</span>,</span><br><span class="line">                                       download=<span class="literal">True</span>, transform=transform)</span><br><span class="line">testloader = torch.utils.data.DataLoader(testset, batch_size=<span class="number">8</span>,</span><br><span class="line">                                         shuffle=<span class="literal">False</span>, num_workers=<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">classes = (<span class="string">&#x27;plane&#x27;</span>, <span class="string">&#x27;car&#x27;</span>, <span class="string">&#x27;bird&#x27;</span>, <span class="string">&#x27;cat&#x27;</span>,</span><br><span class="line">           <span class="string">&#x27;deer&#x27;</span>, <span class="string">&#x27;dog&#x27;</span>, <span class="string">&#x27;frog&#x27;</span>, <span class="string">&#x27;horse&#x27;</span>, <span class="string">&#x27;ship&#x27;</span>, <span class="string">&#x27;truck&#x27;</span>)</span><br></pre></td></tr></table></figure></div>
+<pre><code>Downloading https://www.cs.toronto.edu/~kriz/cifar-10-python.tar.gz to ./data/cifar-10-python.tar.gz
+
+
+100%|██████████| 170498071/170498071 [00:04&lt;00:00, 42350767.25it/s]
+
+
+Extracting ./data/cifar-10-python.tar.gz to ./data
+Files already downloaded and verified</code></pre>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">imshow</span>(<span class="params">img</span>):</span><br><span class="line">    plt.figure(figsize=(<span class="number">8</span>,<span class="number">8</span>))</span><br><span class="line">    img = img / <span class="number">2</span> + <span class="number">0.5</span>     <span class="comment"># 转换到 [0,1] 之间</span></span><br><span class="line">    npimg = img.numpy()</span><br><span class="line">    plt.imshow(np.transpose(npimg, (<span class="number">1</span>, <span class="number">2</span>, <span class="number">0</span>)))</span><br><span class="line">    plt.show()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 得到一组图像</span></span><br><span class="line">images, labels = <span class="built_in">next</span>(<span class="built_in">iter</span>(trainloader))</span><br><span class="line"><span class="comment"># 展示图像</span></span><br><span class="line">imshow(torchvision.utils.make_grid(images))</span><br><span class="line"><span class="comment"># 展示第一行图像的标签</span></span><br><span class="line"><span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">8</span>):</span><br><span class="line">    <span class="built_in">print</span>(classes[labels[j]])</span><br></pre></td></tr></table></figure></div>
+<p>​<br />
+<img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="D:\Desktop\DEEPlearning_work\week2_files\week2_20_0.png"
+                     
+alt="png" 
+                > ​</p>
+<pre><code>dog
+plane
+plane
+truck
+horse
+frog
+frog
+cat</code></pre>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Net</span>(nn.Module):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="built_in">super</span>(Net, <span class="variable language_">self</span>).__init__()</span><br><span class="line">        <span class="variable language_">self</span>.conv1 = nn.Conv2d(<span class="number">3</span>, <span class="number">6</span>, <span class="number">5</span>)</span><br><span class="line">        <span class="variable language_">self</span>.pool = nn.MaxPool2d(<span class="number">2</span>, <span class="number">2</span>)</span><br><span class="line">        <span class="variable language_">self</span>.conv2 = nn.Conv2d(<span class="number">6</span>, <span class="number">16</span>, <span class="number">5</span>)</span><br><span class="line">        <span class="variable language_">self</span>.fc1 = nn.Linear(<span class="number">16</span> * <span class="number">5</span> * <span class="number">5</span>, <span class="number">120</span>)</span><br><span class="line">        <span class="variable language_">self</span>.fc2 = nn.Linear(<span class="number">120</span>, <span class="number">84</span>)</span><br><span class="line">        <span class="variable language_">self</span>.fc3 = nn.Linear(<span class="number">84</span>, <span class="number">10</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x</span>):</span><br><span class="line">        x = <span class="variable language_">self</span>.pool(F.relu(<span class="variable language_">self</span>.conv1(x)))</span><br><span class="line">        x = <span class="variable language_">self</span>.pool(F.relu(<span class="variable language_">self</span>.conv2(x)))</span><br><span class="line">        x = x.view(-<span class="number">1</span>, <span class="number">16</span> * <span class="number">5</span> * <span class="number">5</span>)</span><br><span class="line">        x = F.relu(<span class="variable language_">self</span>.fc1(x))</span><br><span class="line">        x = F.relu(<span class="variable language_">self</span>.fc2(x))</span><br><span class="line">        x = <span class="variable language_">self</span>.fc3(x)</span><br><span class="line">        <span class="keyword">return</span> x</span><br><span class="line"></span><br><span class="line"><span class="comment"># 网络放到GPU上</span></span><br><span class="line">net = Net().to(device)</span><br><span class="line">criterion = nn.CrossEntropyLoss()</span><br><span class="line">optimizer = optim.Adam(net.parameters(), lr=<span class="number">0.001</span>)</span><br></pre></td></tr></table></figure></div>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> epoch <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">10</span>):  <span class="comment"># 重复多轮训练</span></span><br><span class="line">    <span class="keyword">for</span> i, (inputs, labels) <span class="keyword">in</span> <span class="built_in">enumerate</span>(trainloader):</span><br><span class="line">        inputs = inputs.to(device)</span><br><span class="line">        labels = labels.to(device)</span><br><span class="line">        <span class="comment"># 优化器梯度归零</span></span><br><span class="line">        optimizer.zero_grad()</span><br><span class="line">        <span class="comment"># 正向传播 +　反向传播 + 优化</span></span><br><span class="line">        outputs = net(inputs)</span><br><span class="line">        loss = criterion(outputs, labels)</span><br><span class="line">        loss.backward()</span><br><span class="line">        optimizer.step()</span><br><span class="line">        <span class="comment"># 输出统计信息</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;Epoch: %d Minibatch: %5d loss: %.3f&#x27;</span> %(epoch + <span class="number">1</span>, i + <span class="number">1</span>, loss.item()))</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;Finished Training&#x27;</span>)</span><br></pre></td></tr></table></figure></div>
+<pre><code>Epoch: 1 Minibatch:   782 loss: 0.661
+Epoch: 2 Minibatch:   782 loss: 0.946
+Epoch: 3 Minibatch:   782 loss: 0.685
+Epoch: 4 Minibatch:   782 loss: 0.936
+Epoch: 5 Minibatch:   782 loss: 0.623
+Epoch: 6 Minibatch:   782 loss: 0.757
+Epoch: 7 Minibatch:   782 loss: 0.744
+Epoch: 8 Minibatch:   782 loss: 1.036
+Epoch: 9 Minibatch:   782 loss: 0.991
+Epoch: 10 Minibatch:   782 loss: 0.649
+Finished Training</code></pre>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 得到一组图像</span></span><br><span class="line">images, labels = <span class="built_in">next</span>(<span class="built_in">iter</span>(testloader))</span><br><span class="line"><span class="comment"># 展示图像</span></span><br><span class="line">imshow(torchvision.utils.make_grid(images))</span><br><span class="line"><span class="comment"># 展示图像的标签</span></span><br><span class="line"><span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">8</span>):</span><br><span class="line">    <span class="built_in">print</span>(classes[labels[j]])</span><br></pre></td></tr></table></figure></div>
+<p>​<br />
+<img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="D:\Desktop\DEEPlearning_work\week2_files\week2_23_0.png"
+                     
+alt="png" 
+                > ​</p>
+<pre><code>cat
+ship
+ship
+plane
+frog
+frog
+car
+frog</code></pre>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">outputs = net(images.to(device))</span><br><span class="line">_, predicted = torch.<span class="built_in">max</span>(outputs, <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 展示预测的结果</span></span><br><span class="line"><span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">8</span>):</span><br><span class="line">    <span class="built_in">print</span>(classes[predicted[j]])</span><br></pre></td></tr></table></figure></div>
+<pre><code>cat
+ship
+ship
+plane
+deer
+frog
+car
+frog</code></pre>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">correct = <span class="number">0</span></span><br><span class="line">total = <span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> data <span class="keyword">in</span> testloader:</span><br><span class="line">    images, labels = data</span><br><span class="line">    images, labels = images.to(device), labels.to(device)</span><br><span class="line">    outputs = net(images)</span><br><span class="line">    _, predicted = torch.<span class="built_in">max</span>(outputs.data, <span class="number">1</span>)</span><br><span class="line">    total += labels.size(<span class="number">0</span>)</span><br><span class="line">    correct += (predicted == labels).<span class="built_in">sum</span>().item()</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;Accuracy of the network on the 10000 test images: %d %%&#x27;</span> % (</span><br><span class="line">    <span class="number">100</span> * correct / total))</span><br></pre></td></tr></table></figure></div>
+<pre><code>Accuracy of the network on the 10000 test images: 63 %</code></pre>
+<h1 id="实验三-vgg16对cifar10进行分类">实验三
+VGG16对CIFAR10进行分类</h1>
+<p>VGG是由Simonyan 和Zisserman在文献《Very Deep Convolutional Networks
+for Large Scale Image
+Recognition》中提出卷积神经网络模型，其名称来源于作者所在的牛津大学视觉几何组(Visual
+Geometry Group)的缩写。 16层网络的结节信息如下：</p>
+<ul>
+<li>01：Convolution using 64 filters</li>
+<li>02: Convolution using 64 filters + Max pooling</li>
+<li>03: Convolution using 128 filters</li>
+<li>04: Convolution using 128 filters + Max pooling</li>
+<li>05: Convolution using 256 filters</li>
+<li>06: Convolution using 256 filters</li>
+<li>07: Convolution using 256 filters + Max pooling</li>
+<li>08: Convolution using 512 filters</li>
+<li>09: Convolution using 512 filters</li>
+<li>10: Convolution using 512 filters + Max pooling</li>
+<li>11: Convolution using 512 filters</li>
+<li>12: Convolution using 512 filters</li>
+<li>13: Convolution using 512 filters + Max pooling</li>
+<li>14: Fully connected with 4096 nodes</li>
+<li>15: Fully connected with 4096 nodes</li>
+<li>16: Softmax</li>
+</ul>
+<h2 id="定义dataloader">1.定义dataloader</h2>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> torchvision</span><br><span class="line"><span class="keyword">import</span> torchvision.transforms <span class="keyword">as</span> transforms</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> torch.nn <span class="keyword">as</span> nn</span><br><span class="line"><span class="keyword">import</span> torch.nn.functional <span class="keyword">as</span> F</span><br><span class="line"><span class="keyword">import</span> torch.optim <span class="keyword">as</span> optim</span><br><span class="line"></span><br><span class="line">device = torch.device(<span class="string">&quot;cuda:0&quot;</span> <span class="keyword">if</span> torch.cuda.is_available() <span class="keyword">else</span> <span class="string">&quot;cpu&quot;</span>)</span><br><span class="line"></span><br><span class="line">transform_train = transforms.Compose([</span><br><span class="line">    transforms.RandomCrop(<span class="number">32</span>, padding=<span class="number">4</span>),</span><br><span class="line">    transforms.RandomHorizontalFlip(),</span><br><span class="line">    transforms.ToTensor(),</span><br><span class="line">    transforms.Normalize((<span class="number">0.4914</span>, <span class="number">0.4822</span>, <span class="number">0.4465</span>), (<span class="number">0.2023</span>, <span class="number">0.1994</span>, <span class="number">0.2010</span>))])</span><br><span class="line"></span><br><span class="line">transform_test = transforms.Compose([</span><br><span class="line">    transforms.ToTensor(),</span><br><span class="line">    transforms.Normalize((<span class="number">0.4914</span>, <span class="number">0.4822</span>, <span class="number">0.4465</span>), (<span class="number">0.2023</span>, <span class="number">0.1994</span>, <span class="number">0.2010</span>))])</span><br><span class="line"></span><br><span class="line">trainset = torchvision.datasets.CIFAR10(root=<span class="string">&#x27;./data&#x27;</span>, train=<span class="literal">True</span>,  download=<span class="literal">True</span>, transform=transform_train)</span><br><span class="line">testset  = torchvision.datasets.CIFAR10(root=<span class="string">&#x27;./data&#x27;</span>, train=<span class="literal">False</span>, download=<span class="literal">True</span>, transform=transform_test)</span><br><span class="line"></span><br><span class="line">trainloader = torch.utils.data.DataLoader(trainset, batch_size=<span class="number">128</span>, shuffle=<span class="literal">True</span>, num_workers=<span class="number">2</span>)</span><br><span class="line">testloader = torch.utils.data.DataLoader(testset, batch_size=<span class="number">128</span>, shuffle=<span class="literal">False</span>, num_workers=<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">classes = (<span class="string">&#x27;plane&#x27;</span>, <span class="string">&#x27;car&#x27;</span>, <span class="string">&#x27;bird&#x27;</span>, <span class="string">&#x27;cat&#x27;</span>,</span><br><span class="line">           <span class="string">&#x27;deer&#x27;</span>, <span class="string">&#x27;dog&#x27;</span>, <span class="string">&#x27;frog&#x27;</span>, <span class="string">&#x27;horse&#x27;</span>, <span class="string">&#x27;ship&#x27;</span>, <span class="string">&#x27;truck&#x27;</span>)</span><br><span class="line">device</span><br></pre></td></tr></table></figure></div>
+<pre><code>Files already downloaded and verified
+Files already downloaded and verified
+
+
+
+
+
+device(type=&#39;cuda&#39;, index=0)</code></pre>
+<p>定义VGG网络结构</p>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">VGG</span>(nn.Module):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="built_in">super</span>(VGG, <span class="variable language_">self</span>).__init__()</span><br><span class="line">        <span class="variable language_">self</span>.cfg = [<span class="number">64</span>, <span class="string">&#x27;M&#x27;</span>, <span class="number">128</span>, <span class="string">&#x27;M&#x27;</span>, <span class="number">256</span>, <span class="number">256</span>, <span class="string">&#x27;M&#x27;</span>, <span class="number">512</span>, <span class="number">512</span>, <span class="string">&#x27;M&#x27;</span>, <span class="number">512</span>, <span class="number">512</span>, <span class="string">&#x27;M&#x27;</span>]</span><br><span class="line">        <span class="variable language_">self</span>.features = <span class="variable language_">self</span>._make_layers(<span class="variable language_">self</span>.cfg)</span><br><span class="line">        <span class="variable language_">self</span>.classifier = nn.Linear(<span class="number">512</span>, <span class="number">10</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x</span>):</span><br><span class="line">        out = <span class="variable language_">self</span>.features(x)</span><br><span class="line">        out = out.view(out.size(<span class="number">0</span>), -<span class="number">1</span>)</span><br><span class="line">        out = <span class="variable language_">self</span>.classifier(out)</span><br><span class="line">        <span class="keyword">return</span> out</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">_make_layers</span>(<span class="params">self, cfg</span>):</span><br><span class="line">        layers = []</span><br><span class="line">        in_channels = <span class="number">3</span></span><br><span class="line">        <span class="keyword">for</span> x <span class="keyword">in</span> cfg:</span><br><span class="line">            <span class="keyword">if</span> x == <span class="string">&#x27;M&#x27;</span>:</span><br><span class="line">                layers += [nn.MaxPool2d(kernel_size=<span class="number">2</span>, stride=<span class="number">2</span>)]</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                layers += [nn.Conv2d(in_channels, x, kernel_size=<span class="number">3</span>, padding=<span class="number">1</span>),</span><br><span class="line">                           nn.BatchNorm2d(x),</span><br><span class="line">                           nn.ReLU(inplace=<span class="literal">True</span>)]</span><br><span class="line">                in_channels = x</span><br><span class="line">        layers += [nn.AvgPool2d(kernel_size=<span class="number">1</span>, stride=<span class="number">1</span>)]</span><br><span class="line">        <span class="keyword">return</span> nn.Sequential(*layers)</span><br></pre></td></tr></table></figure></div>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">net = VGG().to(device)</span><br><span class="line">criterion = nn.CrossEntropyLoss()</span><br><span class="line">optimizer = optim.Adam(net.parameters(), lr=<span class="number">0.001</span>)</span><br></pre></td></tr></table></figure></div>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> epoch <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">10</span>):  <span class="comment"># 重复多轮训练</span></span><br><span class="line">    <span class="keyword">for</span> i, (inputs, labels) <span class="keyword">in</span> <span class="built_in">enumerate</span>(trainloader):</span><br><span class="line">        inputs = inputs.to(device)</span><br><span class="line">        labels = labels.to(device)</span><br><span class="line">        <span class="comment"># 优化器梯度归零</span></span><br><span class="line">        optimizer.zero_grad()</span><br><span class="line">        <span class="comment"># 正向传播 +　反向传播 + 优化</span></span><br><span class="line">        outputs = net(inputs)</span><br><span class="line">        loss = criterion(outputs, labels)</span><br><span class="line">        loss.backward()</span><br><span class="line">        optimizer.step()</span><br><span class="line">        <span class="comment"># 输出统计信息</span></span><br><span class="line">        <span class="keyword">if</span> i % <span class="number">100</span> == <span class="number">0</span>:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&#x27;Epoch: %d Minibatch: %5d loss: %.3f&#x27;</span> %(epoch + <span class="number">1</span>, i + <span class="number">1</span>, loss.item()))</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;Finished Training&#x27;</span>)</span><br></pre></td></tr></table></figure></div>
+<pre><code>Epoch: 1 Minibatch:     1 loss: 2.621
+Epoch: 1 Minibatch:   101 loss: 1.599
+Epoch: 1 Minibatch:   201 loss: 1.181
+Epoch: 1 Minibatch:   301 loss: 1.007
+Epoch: 2 Minibatch:     1 loss: 1.008
+Epoch: 2 Minibatch:   101 loss: 1.230
+Epoch: 2 Minibatch:   201 loss: 0.873
+Epoch: 2 Minibatch:   301 loss: 0.875
+Epoch: 3 Minibatch:     1 loss: 0.961
+Epoch: 3 Minibatch:   101 loss: 0.716
+Epoch: 3 Minibatch:   201 loss: 0.831
+Epoch: 3 Minibatch:   301 loss: 0.794
+Epoch: 4 Minibatch:     1 loss: 0.670
+Epoch: 4 Minibatch:   101 loss: 0.819
+Epoch: 4 Minibatch:   201 loss: 0.770
+Epoch: 4 Minibatch:   301 loss: 0.718
+Epoch: 5 Minibatch:     1 loss: 0.587
+Epoch: 5 Minibatch:   101 loss: 0.524
+Epoch: 5 Minibatch:   201 loss: 0.593
+Epoch: 5 Minibatch:   301 loss: 0.588
+Epoch: 6 Minibatch:     1 loss: 0.457
+Epoch: 6 Minibatch:   101 loss: 0.615
+Epoch: 6 Minibatch:   201 loss: 0.647
+Epoch: 6 Minibatch:   301 loss: 0.657
+Epoch: 7 Minibatch:     1 loss: 0.681
+Epoch: 7 Minibatch:   101 loss: 0.607
+Epoch: 7 Minibatch:   201 loss: 0.465
+Epoch: 7 Minibatch:   301 loss: 0.533
+Epoch: 8 Minibatch:     1 loss: 0.588
+Epoch: 8 Minibatch:   101 loss: 0.584
+Epoch: 8 Minibatch:   201 loss: 0.463
+Epoch: 8 Minibatch:   301 loss: 0.448
+Epoch: 9 Minibatch:     1 loss: 0.407
+Epoch: 9 Minibatch:   101 loss: 0.465
+Epoch: 9 Minibatch:   201 loss: 0.417
+Epoch: 9 Minibatch:   301 loss: 0.423
+Epoch: 10 Minibatch:     1 loss: 0.448
+Epoch: 10 Minibatch:   101 loss: 0.285
+Epoch: 10 Minibatch:   201 loss: 0.507
+Epoch: 10 Minibatch:   301 loss: 0.371
+Finished Training</code></pre>
+<div class="highlight-container" data-rel="Python"><figure class="iseeu highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">correct = <span class="number">0</span></span><br><span class="line">total = <span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> data <span class="keyword">in</span> testloader:</span><br><span class="line">    images, labels = data</span><br><span class="line">    images, labels = images.to(device), labels.to(device)</span><br><span class="line">    outputs = net(images)</span><br><span class="line">    _, predicted = torch.<span class="built_in">max</span>(outputs.data, <span class="number">1</span>)</span><br><span class="line">    total += labels.size(<span class="number">0</span>)</span><br><span class="line">    correct += (predicted == labels).<span class="built_in">sum</span>().item()</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;Accuracy of the network on the 10000 test images: %.2f %%&#x27;</span> % (</span><br><span class="line">    <span class="number">100</span> * correct / total))</span><br></pre></td></tr></table></figure></div>
+<pre><code>Accuracy of the network on the 10000 test images: 82.94 %</code></pre>
+<h1 id="思考">思考</h1>
+<ul>
+<li><p>dataloader ⾥⾯ shuffle 取不同值有什么区别？</p>
+<p>答：<code>shuffle=True</code>: 每次 epoch
+开始时，数据集都会被重新打乱。这可以帮助模型避免记忆训练数据的顺序，从而提高模型的泛化能力，特别是对于小数据集或数据存在顺序依赖的情况。</p>
+<p><code>shuffle=False</code>:
+数据按照原始顺序进行处理，这在数据有特定顺序或需要按顺序处理时（例如时间序列数据）可能是必要的。</p></li>
+<li><p>transform ⾥，取了不同值，这个有什么区别？</p>
+<p>答：在数据预处理阶段， <code>transform</code>
+能够对数据进行不同的转换，不同的 <code>transform</code>
+设置可以显著的影响模型训练的效果，合适的取值能帮助模型在训练时学习到更多的特征，提升模型的泛化能力，并使模型在面对实际应用中的数据变化时更为鲁棒。在实际应用中，通常会根据具体任务和数据集的特性来选择合适的
+<code>transform</code> 操作。</p></li>
+<li><p>epoch 和 batch 的区别？</p>
+<p>epoch是数据集被完整训练的轮次，batch是单次数据传播与误差反向传播是输入数据量的大小。</p></li>
+<li><p>1x1的卷积和 FC 有什么区别？主要起什么作⽤？</p>
+<p>1x1卷积是选用大小为1的卷积核，可以用来改变特征图的通道数。全连接层是一个每个神经元都与前一层的每个神经元连接的层，通常用于将卷积层或池化层的输出展平（flatten）后，进行进一步的分类或回归任务。</p></li>
+<li><p>residual leanring 为什么能够提升准确率？</p>
+<p>Residual Learning
+通过引入残差块和快捷连接，解决了深层神经网络中常见的梯度消失、学习困难等问题，从而提高了网络的训练效果和准确率。它简化了学习目标，改善了梯度流动，允许设计更深的网络，并减少了训练误差，这些因素共同作用提升了模型的整体性能。</p></li>
+<li><p>代码练习⼆⾥，⽹络和1989年 Lecun 提出的 LeNet 有什么区别？</p>
+<ol type="1">
+<li>激活函数不同，网络使用relu函数，lenet使用tanh函数</li>
+<li>池化层不同，网络使用的是最大池化，lenet使用的是平均池化</li>
+</ol></li>
+<li><p>代码练习⼆⾥，卷积以后feature map 尺⼨会变⼩，如何应⽤ Residual
+Learning?</p>
+<p>在 Residual Learning
+中，卷积操作后特征图尺寸的变化可以通过在快捷连接中调整尺寸来处理，确保残差块的输入和输出尺寸匹配。</p></li>
+<li><p>有什么⽅法可以进⼀步提升准确率？</p>
+<p>数据增强、增加网络深度、优化网络结构、正则化、超参数的寻优、对数据进一步预处理</p></li>
+</ul>
+
+        </div>
+
+        
+
+        
+
+        
+
+        
+            <div class="article-nav my-8 flex justify-between items-center px-2 sm:px-6 md:px-8">
+                
+                
+                    <div class="article-next border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
+                        <a class="next"
+                        rel="next"
+                        href="/2024/09/02/hello-world/"
+                        >
+                            <span class="title flex justify-center items-center">
+                                <span class="post-nav-title-item">Hello World</span>
+                                <span class="post-nav-item">Next posts</span>
+                            </span>
+                            <span class="right arrow-icon flex justify-center items-center">
+                                <i class="fa-solid fa-chevron-right"></i>
+                            </span>
+                        </a>
+                    </div>
+                
+            </div>
+        
+
+
+        
+            <div class="comment-container px-2 sm:px-6 md:px-8 pb-8">
+                <div class="comments-container mt-10 w-full ">
+    <div id="comment-anchor" class="w-full h-2.5"></div>
+    <div class="comment-area-title w-full my-1.5 md:my-2.5 text-xl md:text-3xl font-bold">
+        Comments
+    </div>
+    
+
+        
+            
+    <div id="waline"></div>
+    <script type="module" data-swup-reload-script>
+      import { init } from '/js/libs/waline.mjs';
+
+      function loadWaline() {
+        init({
+          el: '#waline',
+          serverURL: 'https://example.example.com',
+          lang: 'zh-CN',
+          dark: 'body[class~="dark-mode"]',
+          reaction: false,
+          requiredMeta: ['nick', 'mail'],
+          emoji: [],
+          recaptchaV3Key: "wasd",
+          
+        });
+      }
+
+      if (typeof swup !== 'undefined') {
+        loadWaline();
+      } else {
+        window.addEventListener('DOMContentLoaded', loadWaline);
+      }
+    </script>
+
+
+
+        
+    
+</div>
+
+            </div>
+        
+    </div>
+
+    
+        <div class="toc-content-container">
+            <div class="post-toc-wrap">
+    <div class="post-toc">
+        <div class="toc-title">On this page</div>
+        <div class="page-title">OUC_DeepLearning_week2</div>
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%9E%E9%AA%8C%E4%B8%80"><span class="nav-text">实验一</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8A%A0%E8%BD%BD%E6%95%B0%E6%8D%AE"><span class="nav-text">加载数据</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E7%BD%91%E7%BB%9C"><span class="nav-text">2.创建网络</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9C%A8%E5%B0%8F%E5%9E%8B%E5%85%A8%E8%BF%9E%E6%8E%A5%E7%BD%91%E7%BB%9C%E4%B8%8A%E8%AE%AD%E7%BB%83"><span class="nav-text">3.在小型全连接网络上训练</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9C%A8cnn%E4%B8%8A%E8%AE%AD%E7%BB%83"><span class="nav-text">4.在CNN上训练</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%89%93%E4%B9%B1%E5%83%8F%E7%B4%A0%E9%A1%BA%E5%BA%8F%E9%87%8D%E6%96%B0%E5%9C%A8%E4%B8%A4%E4%B8%AA%E7%BD%91%E7%BB%9C%E4%B8%8A%E8%AE%AD%E7%BB%83"><span class="nav-text">5.打乱像素顺序，重新在两个网络上训练</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%9E%E9%AA%8C%E4%BA%8C-%E6%90%AD%E5%BB%BAcnn%E5%AE%8C%E6%88%90cifar10%E5%88%86%E7%B1%BB"><span class="nav-text">实验二
+搭建CNN完成CIFAR10分类</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%9E%E9%AA%8C%E4%B8%89-vgg16%E5%AF%B9cifar10%E8%BF%9B%E8%A1%8C%E5%88%86%E7%B1%BB"><span class="nav-text">实验三
+VGG16对CIFAR10进行分类</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9A%E4%B9%89dataloader"><span class="nav-text">1.定义dataloader</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%80%9D%E8%80%83"><span class="nav-text">思考</span></a></li></ol>
+
+    </div>
+</div>
+        </div>
+    
+</div>
+
+
+
+                
+
+            </div>
+
+            
+
+        </div>
+
+        <div class="main-content-footer">
+            <footer class="footer mt-5 py-5 h-auto text-base text-third-text-color relative border-t-2 border-t-border-color">
+    <div class="info-container py-3 text-center">
+        
+        <div class="text-center">
+            &copy;
+            
+              <span>2022</span>
+              -
+            
+            2024&nbsp;&nbsp;<i class="fa-solid fa-heart fa-beat" style="--fa-animation-duration: 0.5s; color: #f54545"></i>&nbsp;&nbsp;<a href="/">WangMingqiang</a>
+            
+                
+                <p class="post-count space-x-0.5">
+                    <span>
+                        3 posts in total
+                    </span>
+                    
+                </p>
+            
+        </div>
+        
+            <script data-swup-reload-script src="https://cn.vercount.one/js"></script>
+            <div class="relative text-center lg:absolute lg:right-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-right">
+                
+                    <span id="busuanzi_container_site_uv" class="lg:!block">
+                        <span class="text-sm">VISITOR COUNT</span>
+                        <span id="busuanzi_value_site_uv"></span>
+                    </span>
+                
+                
+                    <span id="busuanzi_container_site_pv" class="lg:!block">
+                        <span class="text-sm">TOTAL PAGE VIEWS</span>
+                        <span id="busuanzi_value_site_pv"></span>
+                    </span>
+                
+            </div>
+        
+        <div class="relative text-center lg:absolute lg:left-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-left">
+            <span class="lg:block text-sm">POWERED BY <?xml version="1.0" encoding="utf-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg class="relative top-[2px] inline-block align-baseline" version="1.1" id="圖層_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1rem" height="1rem" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"><path fill="#0E83CD" d="M256.4,25.8l-200,115.5L56,371.5l199.6,114.7l200-115.5l0.4-230.2L256.4,25.8z M349,354.6l-18.4,10.7l-18.6-11V275H200v79.6l-18.4,10.7l-18.6-11v-197l18.5-10.6l18.5,10.8V237h112v-79.6l18.5-10.6l18.5,10.8V354.6z"/></svg><a target="_blank" class="text-base" href="https://hexo.io">Hexo</a></span>
+            <span class="text-sm lg:block">THEME&nbsp;<a class="text-base" target="_blank" href="https://github.com/EvanNotFound/hexo-theme-redefine">Redefine v2.7.0</a></span>
+        </div>
+        
+        
+            <div>
+                Blog up for <span class="odometer" id="runtime_days" ></span> days <span class="odometer" id="runtime_hours"></span> hrs <span class="odometer" id="runtime_minutes"></span> Min <span class="odometer" id="runtime_seconds"></span> Sec
+            </div>
+        
+        
+            <script data-swup-reload-script>
+                try {
+                    function odometer_init() {
+                    const elements = document.querySelectorAll('.odometer');
+                    elements.forEach(el => {
+                        new Odometer({
+                            el,
+                            format: '( ddd).dd',
+                            duration: 200
+                        });
+                    });
+                    }
+                    odometer_init();
+                } catch (error) {}
+            </script>
+        
+        
+        
+    </div>  
+</footer>
+        </div>
+    </div>
+
+    
+        <div class="post-tools">
+            <div class="post-tools-container">
+    <ul class="article-tools-list">
+        <!-- TOC aside toggle -->
+        
+            <li class="right-bottom-tools page-aside-toggle">
+                <i class="fa-regular fa-outdent"></i>
+            </li>
+        
+
+        <!-- go comment -->
+        
+            <li class="go-comment">
+                <i class="fa-regular fa-comments"></i>
+            </li>
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <div class="right-side-tools-container">
+        <div class="side-tools-container">
+    <ul class="hidden-tools-list">
+        <li class="right-bottom-tools tool-font-adjust-plus flex justify-center items-center">
+            <i class="fa-regular fa-magnifying-glass-plus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-font-adjust-minus flex justify-center items-center">
+            <i class="fa-regular fa-magnifying-glass-minus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-dark-light-toggle flex justify-center items-center">
+            <i class="fa-regular fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        
+
+        <li class="right-bottom-tools tool-scroll-to-bottom flex justify-center items-center">
+            <i class="fa-regular fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="visible-tools-list">
+        <li class="right-bottom-tools toggle-tools-list flex justify-center items-center">
+            <i class="fa-regular fa-cog fa-spin"></i>
+        </li>
+        
+            <li class="right-bottom-tools tool-scroll-to-top flex justify-center items-center">
+                <i class="arrow-up fas fa-arrow-up"></i>
+                <span class="percent"></span>
+            </li>
+        
+        
+    </ul>
+</div>
+
+    </div>
+
+    <div class="image-viewer-container">
+    <img src="">
+</div>
+
+
+    
+
+</main>
+
+
+    
+<script src="/js/libs/Swup.min.js"></script>
+
+<script src="/js/libs/SwupSlideTheme.min.js"></script>
+
+<script src="/js/libs/SwupScriptsPlugin.min.js"></script>
+
+<script src="/js/libs/SwupProgressPlugin.min.js"></script>
+
+<script src="/js/libs/SwupScrollPlugin.min.js"></script>
+
+<script src="/js/libs/SwupPreloadPlugin.min.js"></script>
+
+<script>
+    const swup = new Swup({
+        plugins: [
+            new SwupScriptsPlugin({
+                optin: true,
+            }),
+            new SwupProgressPlugin(),
+            new SwupScrollPlugin({
+                offset: 80,
+            }),
+            new SwupSlideTheme({
+                mainElement: ".main-content-body",
+            }),
+            new SwupPreloadPlugin(),
+        ],
+        containers: ["#swup"],
+    });
+</script>
+
+
+
+
+
+
+
+<script src="/js/tools/imageViewer.js" type="module"></script>
+
+<script src="/js/utils.js" type="module"></script>
+
+<script src="/js/main.js" type="module"></script>
+
+<script src="/js/layouts/navbarShrink.js" type="module"></script>
+
+<script src="/js/tools/scrollTopBottom.js" type="module"></script>
+
+<script src="/js/tools/lightDarkSwitch.js" type="module"></script>
+
+<script src="/js/layouts/categoryList.js" type="module"></script>
+
+
+
+
+
+    
+<script src="/js/tools/codeBlock.js" type="module"></script>
+
+
+
+
+    
+<script src="/js/layouts/lazyload.js" type="module"></script>
+
+
+
+
+    
+<script src="/js/tools/runtime.js"></script>
+
+    
+<script src="/js/libs/odometer.min.js"></script>
+
+    
+<link rel="stylesheet" href="/assets/odometer-theme-minimal.css">
+
+
+
+
+  
+<script src="/js/libs/Typed.min.js"></script>
+
+  
+<script src="/js/plugins/typed.js" type="module"></script>
+
+
+
+
+
+
+
+
+
+<div class="post-scripts" data-swup-reload-script>
+    
+        
+<script src="/js/tools/tocToggle.js" type="module"></script>
+
+<script src="/js/layouts/toc.js" type="module"></script>
+
+<script src="/js/plugins/tabs.js" type="module"></script>
+
+    
+</div>
+
+
+</body>
+</html>
